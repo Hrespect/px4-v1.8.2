@@ -33,7 +33,7 @@
 /**
  * @file RunwayTakeoff.cpp
  * Runway takeoff handling for fixed-wing UAVs with steerable wheels.
- *
+ * 有转向轮的固定翼飞机跑道起飞方式
  * @author Roman Bapst <roman@px4.io>
  * @author Andreas Antener <andreas@uaventure.com>
  */
@@ -76,7 +76,7 @@ void RunwayTakeoff::init(float yaw, double current_lat, double current_lon)
 void RunwayTakeoff::update(float airspeed, float alt_agl,
 			   double current_lat, double current_lon, orb_advert_t *mavlink_log_pub)
 {
-
+    //流程：逐渐增加油门--->跑道爬升--->起飞--->预定高度--->爬升完毕--->飞行
 	switch (_state) {
 	case RunwayTakeoffState::THROTTLE_RAMP:
 		if (hrt_elapsed_time(&_initialized_time) > _throttle_ramp_time) {
@@ -101,6 +101,7 @@ void RunwayTakeoff::update(float airspeed, float alt_agl,
 			 * If we started in heading hold mode, move the navigation start WP to the current location now.
 			 * The navigator will take this as starting point to navigate towards the takeoff WP.
 			 */
+            //针对航向保持模式，其将以当前飞行位置作为起飞的航点
 			if (_heading_mode.get() == 0) {
 				_start_wp(0) = (float)current_lat;
 				_start_wp(1) = (float)current_lon;

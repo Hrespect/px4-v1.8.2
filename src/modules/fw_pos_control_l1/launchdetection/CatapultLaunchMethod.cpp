@@ -34,7 +34,7 @@
 /**
  * @file CatapultLaunchMethod.cpp
  * Catapult Launch detection
- *
+ * 弹射模式飞行启动检测
  * @author Thomas Gubler <thomasgubler@gmail.com>
  *
  */
@@ -61,18 +61,22 @@ void CatapultLaunchMethod::update(float accel_x)
 	case LAUNCHDETECTION_RES_NONE:
 
 		/* Detect a acceleration that is longer and stronger as the minimum given by the params */
-		if (accel_x > _thresholdAccel.get()) {
+        //检测当前加速度值与起飞加速度阈值的关系，判断是否进入起飞模式
+        if (accel_x > _thresholdAccel.get()) {
 			_integrator += dt;
 
-			if (_integrator > _thresholdTime.get()) {
+            //判断是否满足时间阈值
+            if (_integrator > _thresholdTime.get()) {
 				if (_motorDelay.get() > 0.0f) {
 					state = LAUNCHDETECTION_RES_DETECTED_ENABLECONTROL;
+                    //带延迟全速启动电机
 					PX4_WARN("Launch detected: enablecontrol, waiting %8.4fs until full throttle",
 						 double(_motorDelay.get()));
 
 				} else {
 					/* No motor delay set: go directly to enablemotors state */
 					state = LAUNCHDETECTION_RES_DETECTED_ENABLEMOTORS;
+                    //不带延迟直接启动电机
 					PX4_WARN("Launch detected: enablemotors (delay not activated)");
 				}
 			}
@@ -86,6 +90,7 @@ void CatapultLaunchMethod::update(float accel_x)
 	case LAUNCHDETECTION_RES_DETECTED_ENABLECONTROL:
 		/* Vehicle is currently controlling attitude but not with full throttle. Waiting until delay is
 		 * over to allow full throttle */
+        //飞机当前可以控制姿态，但油门不是全速，延迟过后变为全速
 		_motorDelayCounter += dt;
 
 		if (_motorDelayCounter > _motorDelay.get()) {
@@ -108,6 +113,7 @@ LaunchDetectionResult CatapultLaunchMethod::getLaunchDetected() const
 
 void CatapultLaunchMethod::reset()
 {
+    //初始化，重新等待启动检测
 	_integrator = 0.0f;
 	_motorDelayCounter = 0.0f;
 	state = LAUNCHDETECTION_RES_NONE;
@@ -116,6 +122,7 @@ void CatapultLaunchMethod::reset()
 float CatapultLaunchMethod::getPitchMax(float pitchMaxDefault)
 {
 	/* If motor is turned on do not impose the extra limit on maximum pitch */
+    //选择是否在启动时限制俯仰轴最大油门量
 	if (state == LAUNCHDETECTION_RES_DETECTED_ENABLEMOTORS) {
 		return pitchMaxDefault;
 

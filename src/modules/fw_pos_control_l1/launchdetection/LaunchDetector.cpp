@@ -84,6 +84,7 @@ LaunchDetectionResult LaunchDetector::getLaunchDetected()
 			/* None of the active _launchmethods has detected a launch, check all _launchmethods */
 			for (unsigned i = 0; i < (sizeof(_launchMethods) / sizeof(_launchMethods[0])); i++) {
 				if (_launchMethods[i]->getLaunchDetected() != LAUNCHDETECTION_RES_NONE) {
+                    //检测已启动的发射检测方法
 					PX4_INFO("selecting launchmethod %d", i);
 					_activeLaunchDetectionMethodIndex = i; // from now on only check this method
 					return _launchMethods[i]->getLaunchDetected();
@@ -107,6 +108,7 @@ float LaunchDetector::getPitchMax(float pitchMaxDefault)
 	/* if a lauchdetectionmethod is active or only one exists return the pitch limit from this method,
 	 * otherwise use the default limit */
 	if (_activeLaunchDetectionMethodIndex < 0) {
+        //未设置发射检测方法
 		if (sizeof(_launchMethods) / sizeof(LaunchMethod *) > 1) {
 			return pitchMaxDefault;
 
@@ -115,6 +117,7 @@ float LaunchDetector::getPitchMax(float pitchMaxDefault)
 		}
 
 	} else {
+        //返回当前检测方法中设置的最大俯仰油门值
 		return _launchMethods[_activeLaunchDetectionMethodIndex]->getPitchMax(pitchMaxDefault);
 	}
 }
