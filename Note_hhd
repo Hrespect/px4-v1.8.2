@@ -1,0 +1,32 @@
+PX4源码编译
+1.ubuntu编译环境配置：http://dev.px4.io/zh/setup/dev_env.html
+2.sudo apt-get install python-pip
+  sudo pip install numpy
+  sudo pip install toml
+  sudo pip install pyyaml
+3.clone Firmware:git clone (-b v1.8.2 用于克隆指定版本分支) https://github.com/PX4/Firmware.git
+  更新子模块：cd Firmware ---->   git submodule update --init --recursive
+4.选择需要编译的功能组件，否则程序过大编译时会出现flash溢出问题(region `flash' overflowed by 21540 bytes)：
+  Firmware/cmake/configs/nuttx_px4fmu-v2_default.cmake文件中注释不需要的模块
+4.make clean
+  make px4_fmu-v2_default
+
+
+
+
+附：git简单使用命令(架构：工作目录-缓存区-HEAD)
+1.git init    初始化当前文件夹为仓库
+2.git add filename    将文件添加到仓库缓存区
+3.git commit -m "备注"    将缓存区文件提交到HEAD
+4.git status    查看当前仓库状态
+5.git branch    查看当前所在分支
+6.git checkout tree    切换当前分支至tree
+7.git checkout -b tree    新建分支tree并切换到tree
+8.git branch -d tree    删除tree分支
+9.git remote add origin https://github.com/Hrespect/px4-v1.8.2.git  将当前本地仓库连接到远程github
+  git push origin master    将master分支推送到远端origin
+  git remote add mygit https://github.com/Hrespect/px4-v1.8.2.git   为本地仓库添加多个远程仓库（仓库名为mygit）
+  git push mygit master    将master分支推送到远端mygit
+10.git diff filename    对比文件相比上次提交的具体修改情况
+11.git config --global user.name "Hrespect"    全局保留用户名
+   git config --global user.email "1069642195@qq.com"    全局保留邮箱
