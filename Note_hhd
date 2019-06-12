@@ -25,8 +25,9 @@ PX4源码编译
 8.git branch -d tree    删除tree分支
 9.git remote add origin https://github.com/Hrespect/px4-v1.8.2.git  将当前本地仓库连接到远程github
   git push origin master    将master分支推送到远端origin
-  git remote add mygit https://github.com/Hrespect/px4-v1.8.2.git   为本地仓库添加多个远程仓库（仓库名为mygit）
-  git push mygit master    将master分支推送到远端mygit
-10.git diff filename    对比文件相比上次提交的具体修改情况
-11.git config --global user.name "Hrespect"    全局保留用户名
+10.git remote add mygit https://github.com/Hrespect/px4-v1.8.2.git   为本地仓库添加多个远程仓库（仓库名为mygit）
+   git push mygit master    将master分支推送到远端mygit
+11.git remote -v    显示当前链接的远程仓库
+12.git diff filename    对比文件相比上次提交的具体修改情况
+13.git config --global user.name "Hrespect"    全局保留用户名
    git config --global user.email "1069642195@qq.com"    全局保留邮箱
